@@ -1,19 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
+using TRAINNING_EMPLOYEE_API.Models;
+using TRAINNING_EMPLOYEE_API.Services;
 
-namespace TRAINNING_EMPLOYEE_API.Controllers; //บอกว่าอยู่ภายใต้โฟลเดอร์อะไร
+namespace TRAINNING_EMPLOYEE_API.Controllers; //บอกว่าไฟล์นี้มาจากfolderอะไร
 
-[ApiController]         //ทางเข้า api
-[Route("api/users")]    //สร้างpath
-public class UserController: ControllerBase { //สรา้งclass
+[ApiController]
+[Route("api/users")] //เรียกใช้งาน api ที่pathไหน
+public class UserController : ControllerBase
+{
+    // https://localhost:5299/api/users
+    [HttpGet("")] //ใช้งาน method get ที่ path
+    public IActionResult GetAllUser()
+    {
 
-    [HttpGet("")]
-    public IActionResult GetAllUser(){
-        return Ok(new {
-            FirstName = "josave",
-            LastName="SEC",
-            YearOfBirth=1985,
-            Phone=00000000
-             //.net จะเปลี่ยนให้camelcsae
-        });
+        User user = new User();
+        UserService userService = new UserService();
+
+
+        user.FirstName = "Josave";
+        user.LastName = "SEC";
+        user.YearOfBirth = 1990;
+        user.Age = userService.CalculateAge(user.YearOfBirth);
+        return Ok(user);
     }
 }
