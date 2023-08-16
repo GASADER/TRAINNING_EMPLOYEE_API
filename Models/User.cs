@@ -6,4 +6,4 @@ public class User{
     public float YearOfBirth {get; set;} =0 ;
     public float Age {get; set;} =0 ;
 
-}ß
+}

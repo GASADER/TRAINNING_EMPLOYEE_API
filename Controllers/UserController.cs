@@ -12,6 +12,7 @@ public class UserController: ControllerBase { //สรา้งclass
             FirstName = "josave",
             LastName="SEC",
             YearOfBirth=1985,
+            Phone=00000000
              //.net จะเปลี่ยนให้camelcsae
         });
     }
