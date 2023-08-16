@@ -36,4 +36,28 @@ public class UserController : ControllerBase
         List<User> user = _dbContext.users.ToList();
         return Ok(user);
     }
+    
+    [HttpPost("")]
+
+    public IActionResult PostUser([FromBody] User userInput)
+    {
+        if (userInput == null)
+        {
+            return BadRequest("Invalid Data");
+        }
+        UserService userService = new UserService();
+
+        User newUser = new User()
+        {
+            FirstName = userInput.FirstName,
+            LastName = userInput.LastName,
+            YearOfBirth = userInput.YearOfBirth,
+            Age = userService.CalculateAge(userInput.YearOfBirth)
+        };
+
+        _dbContext.users.Add(newUser);
+        _dbContext.SaveChanges();
+
+        return Ok();
+    }
 }
