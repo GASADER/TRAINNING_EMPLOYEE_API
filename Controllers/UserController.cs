@@ -8,8 +8,14 @@ namespace TRAINNING_EMPLOYEE_API.Controllers; //บอกว่าไฟล์�
 [Route("api/users")] //เรียกใช้งาน api ที่pathไหน
 public class UserController : ControllerBase
 {
+    private readonly UserDBContext _dbContext;
+
+    public UserController(UserDBContext dBContext)
+    {
+        _dbContext= dBContext;
+    }
     // https://localhost:5299/api/users
-    [HttpGet("")] //ใช้งาน method get ที่ path
+    [HttpGet("help")] //ใช้งาน method get ที่ path
     public IActionResult GetAllUser()
     {
 
@@ -21,6 +27,13 @@ public class UserController : ControllerBase
         user.LastName = "SEC";
         user.YearOfBirth = 1990;
         user.Age = userService.CalculateAge(user.YearOfBirth);
+        return Ok(user);
+    }
+
+    [HttpGet("")]
+    public IActionResult GetHelp()
+    {
+        List<User> user = _dbContext.users.ToList();
         return Ok(user);
     }
 }
