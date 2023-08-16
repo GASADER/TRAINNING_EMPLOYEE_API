@@ -9,7 +9,10 @@ public class UserController: ControllerBase { //สรา้งclass
     [HttpGet("")]
     public IActionResult GetAllUser(){
         return Ok(new {
-            FirstName = "josave" //.net จะเปลี่ยนให้camelcsae
+            FirstName = "josave",
+            LastName="SEC",
+            YearOfBirth=1985,
+             //.net จะเปลี่ยนให้camelcsae
         });
     }
 }
