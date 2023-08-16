@@ -73,4 +73,46 @@ public class UserController : ControllerBase
 
         return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserId }, newUser);
     }
+
+    [HttpPut("{id}")]
+    public IActionResult EditUser(int id, [FromBody] User userInput)
+    {
+        if (userInput == null)
+        {
+            return BadRequest("Invalid Data");
+        }
+
+        var editingUser = _dbContext.users.FirstOrDefault(u => u.UserId == id);
+        if (editingUser == null)
+        {
+            return NotFound();
+        }
+
+        editingUser.FirstName = userInput.FirstName;
+        editingUser.LastName = userInput.LastName;
+        editingUser.YearOfBirth = userInput.YearOfBirth;
+
+        _dbContext.SaveChanges();
+
+        UserService userService = new UserService();
+        editingUser.Age = userService.CalculateAge(editingUser.YearOfBirth);
+        _dbContext.SaveChanges();
+
+        return Ok(editingUser);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteUser(int id)
+    {
+
+        var deletedUser = _dbContext.users.FirstOrDefault(u => u.UserId == id);
+        if (deletedUser == null)
+        {
+            return NotFound();
+        }
+        _dbContext.users.Remove(deletedUser);
+        _dbContext.SaveChanges();
+
+        return NoContent();
+    }
 }
