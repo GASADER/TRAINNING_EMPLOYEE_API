@@ -12,7 +12,7 @@ public class UserController : ControllerBase
 
     public UserController(UserDBContext dBContext)
     {
-        _dbContext= dBContext;
+        _dbContext = dBContext;
     }
     // https://localhost:5299/api/users
     [HttpGet("help")] //ใช้งาน method get ที่ path
@@ -36,7 +36,18 @@ public class UserController : ControllerBase
         List<User> user = _dbContext.users.ToList();
         return Ok(user);
     }
-    
+
+    [HttpGet("{id}")]
+    public IActionResult GetUserById(int id)
+    {
+        var user = _dbContext.users.FirstOrDefault(u => u.UserId == id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        return Ok(user);
+    }
+
     [HttpPost("")]
 
     public IActionResult PostUser([FromBody] User userInput)
@@ -52,12 +63,14 @@ public class UserController : ControllerBase
             FirstName = userInput.FirstName,
             LastName = userInput.LastName,
             YearOfBirth = userInput.YearOfBirth,
-            Age = userService.CalculateAge(userInput.YearOfBirth)
         };
 
         _dbContext.users.Add(newUser);
         _dbContext.SaveChanges();
 
-        return Ok();
+        newUser.Age = userService.CalculateAge(newUser.YearOfBirth);
+        _dbContext.SaveChanges();
+
+        return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserId }, newUser);
     }
 }
