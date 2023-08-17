@@ -9,8 +9,9 @@ public class UserRepository
         _userDBContext = userDBContext;
     }
     public List<User> GetAll()
-    {
-        return _userDBContext.users.ToList();
+    {   
+        
+        return _userDBContext.users.Include(e => e.Phones).ToList();
     }
 
     public void PostUser(User user)
