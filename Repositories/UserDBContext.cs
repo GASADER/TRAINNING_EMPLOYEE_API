@@ -11,5 +11,7 @@ namespace TRAINNING_EMPLOYEE_API.Repositories
 
         public DbSet<User> users { get; set; }
 
+        public DbSet<Phone> phones { get; set; }
+
     }
 }
