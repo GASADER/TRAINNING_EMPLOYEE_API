@@ -52,7 +52,7 @@ public class UserController : ControllerBase
 
     [HttpPost("")]
 
-    public IActionResult PostUser([FromBody] User userInput)
+    public IActionResult PostUser([FromBody] UserRequest userInput)
     {
         if (userInput == null)
         {

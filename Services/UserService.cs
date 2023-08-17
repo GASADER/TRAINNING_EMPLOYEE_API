@@ -23,7 +23,7 @@ public class UserService
         return users;
     }
 
-    public void PostUser(User newUser)
+    public void PostUser(UserRequest newUser)
     {
 
         UserRepository userRepository = new UserRepository(_userDBContext);
@@ -35,6 +35,12 @@ public class UserService
             YearOfBirth = newUser.YearOfBirth,
         };
         user.Age = CalculateAge(user.YearOfBirth);
+        for (int i = 0; i < newUser.Phones.Count; i++)
+        {
+            Phone phone = new Phone();
+            phone.PhoneNumber = newUser.Phones[i]; 
+            user.Phones.Add(phone);
+        };
         userRepository.PostUser(user);
     }
 }
