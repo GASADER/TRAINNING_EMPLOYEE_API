@@ -1,4 +1,4 @@
-using TRAINNING_EMPLOYEE_API.Services;
+using TRAINNING_EMPLOYEE_API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TRAINNING_EMPLOYEE_API.Models;
 
 
-namespace TRAINNING_EMPLOYEE_API.Services
+namespace TRAINNING_EMPLOYEE_API.Repositories
 {
 
     public class UserDBContext : DbContext

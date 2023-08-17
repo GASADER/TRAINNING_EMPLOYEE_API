@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TRAINNING_EMPLOYEE_API.Models;
 using TRAINNING_EMPLOYEE_API.Services;
+using TRAINNING_EMPLOYEE_API.Repositories;
+using Serilog;
 
 namespace TRAINNING_EMPLOYEE_API.Controllers; //บอกว่าไฟล์นี้มาจากfolderอะไร
 
