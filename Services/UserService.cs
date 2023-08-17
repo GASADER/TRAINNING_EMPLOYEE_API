@@ -16,10 +16,10 @@ public class UserService
         return 2023 - YearOfBirth;
     }
 
-    public List<User> GetAll()
+    public List<UserResponse> GetAll()
     {
         UserRepository userRepository = new UserRepository(_userDBContext);
-        List<User> users = userRepository.GetAll();
+        List<UserResponse> users = userRepository.GetAll();
         return users;
     }
 

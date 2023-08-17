@@ -35,7 +35,7 @@ public class UserController : ControllerBase
     public IActionResult GetAllUsers() 
     {
         UserService userService = new UserService(_userDBContext);
-        List<User> user = userService.GetAll();
+        List<UserResponse> user = userService.GetAll();
         return Ok(user);
     }
 
