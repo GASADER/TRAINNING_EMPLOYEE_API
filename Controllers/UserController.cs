@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using TRAINNING_EMPLOYEE_API.Models;
 using TRAINNING_EMPLOYEE_API.Services;
 using TRAINNING_EMPLOYEE_API.Repositories;
-using Serilog;
 
 namespace TRAINNING_EMPLOYEE_API.Controllers; //บอกว่าไฟล์นี้มาจากfolderอะไร
 
@@ -10,19 +9,19 @@ namespace TRAINNING_EMPLOYEE_API.Controllers; //บอกว่าไฟล์�
 [Route("api/users")] //เรียกใช้งาน api ที่pathไหน
 public class UserController : ControllerBase
 {
-    private readonly UserDBContext _dbContext;
+    private readonly UserDBContext _userDBContext;
 
     public UserController(UserDBContext dBContext)
     {
-        _dbContext = dBContext;
+        _userDBContext = dBContext;
     }
     // https://localhost:5299/api/users
     [HttpGet("help")] //ใช้งาน method get ที่ path
-    public IActionResult GetAllUser()
+    public IActionResult GetHelp()
     {
 
         User user = new User();
-        UserService userService = new UserService();
+        UserService userService = new UserService(_userDBContext);
 
 
         user.FirstName = "Josave";
@@ -33,16 +32,17 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("")]
-    public IActionResult GetHelp()
+    public IActionResult GetAllUsers() 
     {
-        List<User> user = _dbContext.users.ToList();
+        UserService userService = new UserService(_userDBContext);
+        List<User> user = userService.GetAll();
         return Ok(user);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetUserById(int id)
     {
-        var user = _dbContext.users.FirstOrDefault(u => u.UserId == id);
+        var user = _userDBContext.users.FirstOrDefault(u => u.UserId == id);
         if (user == null)
         {
             return NotFound();
@@ -58,7 +58,7 @@ public class UserController : ControllerBase
         {
             return BadRequest("Invalid Data");
         }
-        UserService userService = new UserService();
+        UserService userService = new UserService(_userDBContext);
 
         User newUser = new User()
         {
@@ -67,11 +67,11 @@ public class UserController : ControllerBase
             YearOfBirth = userInput.YearOfBirth,
         };
 
-        _dbContext.users.Add(newUser);
-        _dbContext.SaveChanges();
+        _userDBContext.users.Add(newUser);
+        _userDBContext.SaveChanges();
 
         newUser.Age = userService.CalculateAge(newUser.YearOfBirth);
-        _dbContext.SaveChanges();
+        _userDBContext.SaveChanges();
 
         return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserId }, newUser);
     }
@@ -84,7 +84,7 @@ public class UserController : ControllerBase
             return BadRequest("Invalid Data");
         }
 
-        var editingUser = _dbContext.users.FirstOrDefault(u => u.UserId == id);
+        var editingUser = _userDBContext.users.FirstOrDefault(u => u.UserId == id);
         if (editingUser == null)
         {
             return NotFound();
@@ -94,11 +94,11 @@ public class UserController : ControllerBase
         editingUser.LastName = userInput.LastName;
         editingUser.YearOfBirth = userInput.YearOfBirth;
 
-        _dbContext.SaveChanges();
+        _userDBContext.SaveChanges();
 
-        UserService userService = new UserService();
+        UserService userService = new UserService(_userDBContext);
         editingUser.Age = userService.CalculateAge(editingUser.YearOfBirth);
-        _dbContext.SaveChanges();
+        _userDBContext.SaveChanges();
 
         return Ok(editingUser);
     }
@@ -107,13 +107,13 @@ public class UserController : ControllerBase
     public IActionResult DeleteUser(int id)
     {
 
-        var deletedUser = _dbContext.users.FirstOrDefault(u => u.UserId == id);
+        var deletedUser = _userDBContext.users.FirstOrDefault(u => u.UserId == id);
         if (deletedUser == null)
         {
             return NotFound();
         }
-        _dbContext.users.Remove(deletedUser);
-        _dbContext.SaveChanges();
+        _userDBContext.users.Remove(deletedUser);
+        _userDBContext.SaveChanges();
 
         return NoContent();
     }
