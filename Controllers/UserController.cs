@@ -59,21 +59,9 @@ public class UserController : ControllerBase
             return BadRequest("Invalid Data");
         }
         UserService userService = new UserService(_userDBContext);
+        userService.PostUser(userInput);
 
-        User newUser = new User()
-        {
-            FirstName = userInput.FirstName,
-            LastName = userInput.LastName,
-            YearOfBirth = userInput.YearOfBirth,
-        };
-
-        _userDBContext.users.Add(newUser);
-        _userDBContext.SaveChanges();
-
-        newUser.Age = userService.CalculateAge(newUser.YearOfBirth);
-        _userDBContext.SaveChanges();
-
-        return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserId }, newUser);
+        return Ok();
     }
 
     [HttpPut("{id}")]

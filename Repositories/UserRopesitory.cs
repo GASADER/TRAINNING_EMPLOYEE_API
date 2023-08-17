@@ -12,4 +12,10 @@ public class UserRepository
     {
         return _userDBContext.users.ToList();
     }
+
+    public void PostUser(User user)
+    {
+        _userDBContext.users.Add(user);
+        _userDBContext.SaveChanges();
+    }
 }
