@@ -19,8 +19,25 @@ public class UserService
     public List<UserResponse> GetAll()
     {
         UserRepository userRepository = new UserRepository(_userDBContext);
-        List<UserResponse> users = userRepository.GetAll();
-        return users;
+        List<UserResponse> userResponses = new List<UserResponse> ();
+        List<User> users = userRepository.GetAll();
+
+        foreach (User user in users)
+        {
+            UserResponse userResponse = new UserResponse()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                YearOfBirth = user.YearOfBirth,
+                Age = user.Age,
+            };
+            foreach (Phone phone in user.Phones)
+            {
+                userResponse.Phones.Add(phone.PhoneNumber);
+            }
+            userResponses.Add(userResponse);
+        }
+        return userResponses;
     }
 
     public void PostUser(UserRequest newUser)
@@ -38,7 +55,7 @@ public class UserService
         for (int i = 0; i < newUser.Phones.Count; i++)
         {
             Phone phone = new Phone();
-            phone.PhoneNumber = newUser.Phones[i]; 
+            phone.PhoneNumber = newUser.Phones[i];
             user.Phones.Add(phone);
         };
         userRepository.PostUser(user);
